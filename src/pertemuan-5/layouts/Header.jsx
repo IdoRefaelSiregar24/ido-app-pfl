@@ -6,8 +6,10 @@ import { SlSettings } from "react-icons/sl";
 import avatarImage from "../assets/placeholder.png";
 
 export default function Header() {
+
     const [showModal, setShowModal] = useState(false);
- 
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
+
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === "Escape" && showModal) {
@@ -22,6 +24,7 @@ export default function Header() {
         <div>
             <div id="header-container" className="flex justify-between items-center p-4 bg-white border-b border-gray-100 shadow-sm">
                 
+                {/* Search Bar */}
                 <div id="search-bar" className="relative w-full max-w-lg cursor-pointer" onClick={() => setShowModal(true)}>
                     <input
                         id="search-input"
@@ -50,21 +53,34 @@ export default function Header() {
                         <SlSettings />
                     </div>
 
-                    <div id="profile-container" className="flex items-center space-x-4 border-l pl-4 border-gray-200">
+                    {/* Profile Section */}
+                    <div id="profile-container" className="relative flex items-center space-x-4 border-l pl-4 border-gray-200">
                         <span id="profile-text" className="text-gray-700 hidden md:block">
                             Hello, <b className="text-gray-900">Fikri Muhaffizh</b>
                         </span>
                         <img
                             id="profile-avatar"
                             src={avatarImage}
+                            onClick={() => setIsProfileOpen(!isProfileOpen)}
                             className="w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-blue-400 transition duration-200 cursor-pointer"
                             alt="Profile Avatar"
                         />
+
+                        {/* Dropdown Menu Profile */}
+                        {isProfileOpen && (
+                            <div className="absolute right-0 top-12 mt-2 w-48 bg-white rounded-lg shadow-md py-2 border border-gray-100 z-50">
+                                <a href="#profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">My Profile</a>
+                                <a href="#settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors">Settings</a>
+                                <div className="border-t border-gray-100 my-1"></div>
+                                <a href="#logout" className="block px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors">Logout</a>
+                            </div>
+                        )}
                     </div>
                     
                 </div>
             </div>
 
+            {/* Search Modal Overlay */}
             {showModal && (
                 <div 
                     className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center pt-24 z-50 transition-opacity"
