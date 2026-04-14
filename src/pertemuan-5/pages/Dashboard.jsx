@@ -9,12 +9,16 @@ export default function Dashboard() {
                 
                 {/* Orders Card */}
                 <div id="dashboard-orders" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="orders-icon" className="bg-hijau rounded-full p-4 text-white">
+                    <div id="orders-icon" className="bg-hijau rounded-full p-4 text-white shrink-0">
                         <FaShoppingCart className="text-xl" />
                     </div>
-                    <div id="orders-info" className="flex flex-col">
+                    <div id="orders-info" className="flex flex-col w-full">
                         <span id="orders-count" className="text-2xl font-bold">75</span>
-                        <span id="orders-text" className="text-gray-400">Total Orders</span>
+                        <span id="orders-text" className="text-gray-400 text-sm">Total Orders</span>
+                        {/* Progress Bar */}
+                        <div className="bg-gray-200 rounded-full h-1.5 mt-2 w-full">
+                            <div className="bg-hijau h-1.5 rounded-full" style={{ width: '75%' }} />
+                        </div>
                     </div>
                 </div>
 
