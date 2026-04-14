@@ -9,7 +9,7 @@ export default function Dashboard() {
                 
                 {/* Orders Card */}
                 <div id="dashboard-orders" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="orders-icon" className="bg-green-500 rounded-full p-4 text-white">
+                    <div id="orders-icon" className="bg-hijau rounded-full p-4 text-white">
                         <FaShoppingCart className="text-xl" />
                     </div>
                     <div id="orders-info" className="flex flex-col">
@@ -20,7 +20,7 @@ export default function Dashboard() {
 
                 {/* Delivered Card */}
                 <div id="dashboard-delivered" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="delivered-icon" className="bg-blue-500 rounded-full p-4 text-white">
+                    <div id="delivered-icon" className="bg-biru rounded-full p-4 text-white">
                         <FaTruck className="text-xl" />
                     </div>
                     <div id="delivered-info" className="flex flex-col">
@@ -31,7 +31,7 @@ export default function Dashboard() {
 
                 {/* Canceled Card */}
                 <div id="dashboard-canceled" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="canceled-icon" className="bg-red-500 rounded-full p-4 text-white">
+                    <div id="canceled-icon" className="bg-merah rounded-full p-4 text-white">
                         <FaBan className="text-xl" />
                     </div>
                     <div id="canceled-info" className="flex flex-col">
@@ -42,7 +42,7 @@ export default function Dashboard() {
 
                 {/* Revenue Card */}
                 <div id="dashboard-revenue" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="revenue-icon" className="bg-yellow-400 rounded-full p-4 text-white">
+                    <div id="revenue-icon" className="bg-kuning rounded-full p-4 text-white">
                         <FaDollarSign className="text-xl" />
                     </div>
                     <div id="revenue-info" className="flex flex-col">
