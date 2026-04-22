@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { MdAdd, MdMoreVert, MdSearch, MdEmail, MdPhone, MdCardMembership } from "react-icons/md";
+import { MdAdd, MdMoreVert, MdSearch, MdEmail, MdPhone, MdCardMembership, MdPerson, MdCalendarToday, MdOutlineShoppingBag } from "react-icons/md";
 import PageHeader from "../components/PageHeader";
 import Modal from "../components/Modal";
-import { customersData } from "../data";
+import { customersData, ordersData } from "../data";
 
 export default function Customers() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
     const [customers, setCustomers] = useState(customersData);
 
     const getLoyaltyStyle = (loyalty) => {
@@ -17,11 +19,21 @@ export default function Customers() {
         }
     };
 
+    const handleViewDetails = (customer) => {
+        setSelectedCustomer(customer);
+        setIsViewModalOpen(true);
+    };
+
+    // Get orders for selected customer
+    const customerOrders = selectedCustomer 
+        ? ordersData.filter(order => order.customer.customerId === selectedCustomer.customerId)
+        : [];
+
     return (
         <div id="customers-container" className="flex flex-col space-y-6">
             <PageHeader title="Customers" breadcrumb={["Dashboard", "Customers"]}>
                 <button 
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => setIsAddModalOpen(true)}
                     className="bg-hijau hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold flex items-center transition-all shadow-lg active:scale-95"
                 >
                     <MdAdd className="mr-2 text-xl" />
@@ -77,7 +89,12 @@ export default function Customers() {
                         </div>
 
                         <div className="mt-6 pt-6 border-t border-gray-50 flex space-x-2">
-                            <button className="flex-1 py-2 text-sm font-bold text-gray-600 hover:bg-gray-50 rounded-lg transition-all">View Details</button>
+                            <button 
+                                onClick={() => handleViewDetails(customer)}
+                                className="flex-1 py-2 text-sm font-bold text-gray-600 hover:bg-gray-50 rounded-lg transition-all"
+                            >
+                                View Details
+                            </button>
                             <button className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
                                 <MdMoreVert className="text-xl" />
                             </button>
@@ -86,10 +103,104 @@ export default function Customers() {
                 ))}
             </div>
 
+            {/* View Customer Detail Modal */}
+            <Modal 
+                isOpen={isViewModalOpen} 
+                onClose={() => setIsViewModalOpen(false)} 
+                title="Customer Profile"
+            >
+                {selectedCustomer && (
+                    <div className="space-y-6">
+                        {/* Header Info */}
+                        <div className="flex items-center space-x-4 bg-gray-50 p-4 rounded-2xl">
+                            <div className="w-20 h-20 bg-hijau text-white rounded-2xl flex items-center justify-center text-3xl font-bold shadow-lg shadow-green-200">
+                                {selectedCustomer.customerName.charAt(0)}
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900">{selectedCustomer.customerName}</h2>
+                                <p className="text-gray-500 font-medium flex items-center">
+                                    <MdCardMembership className="mr-1 text-hijau" />
+                                    {selectedCustomer.loyalty} Member
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Details Grid */}
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="flex items-center p-3 bg-white border border-gray-100 rounded-xl">
+                                <div className="p-2 bg-blue-50 text-blue-500 rounded-lg mr-3">
+                                    <MdPerson className="text-xl" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Customer ID</p>
+                                    <p className="text-sm font-bold text-gray-700">{selectedCustomer.customerId}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center p-3 bg-white border border-gray-100 rounded-xl">
+                                <div className="p-2 bg-purple-50 text-purple-500 rounded-lg mr-3">
+                                    <MdEmail className="text-xl" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Email Address</p>
+                                    <p className="text-sm font-bold text-gray-700">{selectedCustomer.email}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center p-3 bg-white border border-gray-100 rounded-xl">
+                                <div className="p-2 bg-orange-50 text-orange-500 rounded-lg mr-3">
+                                    <MdPhone className="text-xl" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Phone Number</p>
+                                    <p className="text-sm font-bold text-gray-700">{selectedCustomer.phone}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Order History Summary */}
+                        <div className="space-y-3">
+                            <h3 className="font-bold text-gray-900 flex items-center">
+                                <MdOutlineShoppingBag className="mr-2 text-hijau text-xl" />
+                                Recent Orders
+                            </h3>
+                            <div className="space-y-2">
+                                {customerOrders.length > 0 ? (
+                                    customerOrders.map(order => (
+                                        <div key={order.orderId} className="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-transparent hover:border-gray-200 transition-all">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-gray-800">{order.orderId}</span>
+                                                <span className="text-[10px] text-gray-400 flex items-center">
+                                                    <MdCalendarToday className="mr-1" />
+                                                    {order.orderDate}
+                                                </span>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-sm font-black text-gray-900">
+                                                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(order.totalPrice)}
+                                                </p>
+                                                <span className="text-[10px] font-bold text-hijau uppercase">{order.status}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-center py-4 text-gray-400 text-sm italic">No orders found for this customer.</p>
+                                )}
+                            </div>
+                        </div>
+
+                        <button 
+                            onClick={() => setIsViewModalOpen(false)}
+                            className="w-full py-4 bg-gray-900 text-white font-bold rounded-2xl hover:bg-gray-800 transition-all shadow-lg active:scale-95"
+                        >
+                            Close Profile
+                        </button>
+                    </div>
+                )}
+            </Modal>
+
             {/* Add Customer Modal */}
             <Modal 
-                isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+                isOpen={isAddModalOpen} 
+                onClose={() => setIsAddModalOpen(false)} 
                 title="Add New Customer"
             >
                 <form className="space-y-5">
@@ -126,7 +237,7 @@ export default function Customers() {
                     <div className="pt-4 flex space-x-3">
                         <button 
                             type="button"
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => setIsAddModalOpen(false)}
                             className="flex-1 px-6 py-3 border border-gray-200 text-gray-500 font-bold rounded-xl hover:bg-gray-50 transition-all"
                         >
                             Cancel
